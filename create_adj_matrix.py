@@ -63,12 +63,16 @@ G = G.to_directed()
 nodes = list(G.nodes())
 all_source_target_pairs = list(itertools.permutations(nodes, 2))
 
+edges = list(G.edges())
+edges.map(lambda x: (x[0]+1, x[1]+1))
+np.savetxt(file_name, adj_matrix, delimiter=',')
+
 for pair in all_source_target_pairs:
 	source = pair[0]
 	target = pair[1]
 	adj_matrix = get_route_edge_adj_matrix(G, source, target)
 	adj_matrix.astype(int)
-	file_name = 'matrices/matrix_' + str(source) + '_' + str(target) + '.csv'
+	file_name = 'matrices/matrix_' + str(source+1) + '_' + str(target+1) + '.csv'
 	np.savetxt(file_name, adj_matrix, delimiter=',')
 
 end_time = time.time()
