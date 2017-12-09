@@ -20,14 +20,13 @@ num_regions = mun_df['admin_region'].nunique()
 
 mun_df['admin_region'] = mun_df['admin_region'].apply(lambda x: int(x[-3:-1]))
 
-cooffending_df = cooffending_df.head(10)
-
+# cooffending_df = cooffending_df.head(10)
+cooffending_df = cooffending_df.loc[cooffending_df['annee'] == 2003]
 mun_dict = dict(zip(mun_df.municipal_code,mun_df.admin_region))
 cooffending_df['region'] = cooffending_df['MUN'].map(lambda x: mun_dict.get(x, np.NaN))
 cooffending_df = cooffending_df.dropna()
 cooffending_df['region'] = cooffending_df['region'].astype(int)
-print cooffending_df
-
+cooffending_df.to_csv('cooffending_regions.csv')
 
 
 '''
