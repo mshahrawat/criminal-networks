@@ -38,6 +38,8 @@ start_time = time.time()
 
 def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 	edges = list(G.edges())
+	print len(edges)
+	print edges
 	num_edges = G.number_of_edges()
 	routes = list(nx.all_simple_paths(G, source, target, cutoff))
 	num_routes = len(routes)
@@ -63,11 +65,14 @@ G = G.to_directed()
 nodes = list(G.nodes())
 all_source_target_pairs = list(itertools.permutations(nodes, 2))
 
-edges = list(G.edges())
-edges = map(lambda x: ((x[0]+1, x[1]+1)), edges)
+adj_matrix = get_route_edge_adj_matrix(G, 1, 4)
+print adj_matrix
 
-with open("edges.csv", "wb") as f:
-    np.savetxt(f, edges, fmt='%i', delimiter=",")
+# edges = list(G.edges())
+# edges = map(lambda x: ((x[0]+1, x[1]+1)), edges)
+
+# with open("edges.csv", "wb") as f:
+#     np.savetxt(f, edges, fmt='%i', delimiter=",")
 
 for pair in all_source_target_pairs:
 	source = pair[0]
@@ -78,7 +83,7 @@ for pair in all_source_target_pairs:
 	with open(file_name, "wb") as f:
 		np.savetxt(f, adj_matrix, fmt='%i', delimiter=",")
 
-end_time = time.time()
-print 'Finished creating matrix in', (end_time - start_time) / 60
+# end_time = time.time()
+# print 'Finished creating matrix in', (end_time - start_time) / 60
 
 
