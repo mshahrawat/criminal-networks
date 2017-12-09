@@ -11,7 +11,6 @@ cooffending_df = pd.read_csv('Cooffending.csv', na_values=['.'])
 num_mun = cooffending_df['MUN'].nunique()
 
 mun_df = pd.read_csv('mun_clean.csv')
-# mun_df = mun_df.loc[mun_df['designation'] == 'Municipality']
 num_municipalities = mun_df['municipal_code'].nunique()
 num_regions = mun_df['admin_region'].nunique()
 
@@ -19,22 +18,17 @@ num_regions = mun_df['admin_region'].nunique()
 # num_mun_codes = mun_codes_df['municipal_code'].nunique()
 # directed graph with edges both ways
 
-# now map the mun codes to the admin region, create edges between them
 mun_df['admin_region'] = mun_df['admin_region'].apply(lambda x: int(x[-3:-1]))
 
 cooffending_df = cooffending_df.head(10)
-# print cooffending_df
-cooffending_df['region'] = cooffending_df['MUN'].map(lambda x: mun_df.loc[mun_df['municipal_code'] == x]['admin_region'].values)
-cooffending_df = cooffending_df[cooffending_df['region'] != '']
+
+mun_dict = dict(zip(mun_df.municipal_code,mun_df.admin_region))
+cooffending_df['region'] = cooffending_df['MUN'].map(lambda x: mun_dict.get(x, np.NaN))
+cooffending_df = cooffending_df.dropna()
+cooffending_df['region'] = cooffending_df['region'].astype(int)
 print cooffending_df
-# usa['date'].map(lambda x: 12 * (x.year - 2008) + x.month)
 
-# print num_mun
-# print num_municipalities
-# print num_mun_codes
-# print num_regions
 
-# mun_df.loc[mun_df['municipal_code'] == x]['']
 
 '''
 TODO: create graph G for with edges for neighboring municipalities
