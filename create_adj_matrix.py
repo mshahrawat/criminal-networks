@@ -31,18 +31,10 @@ edges will have cost associated with them as specified
 '''
 
 # create dummy graph for testing
-# NEED directed graph with edges both ways
 # G = nx.complete_graph(4)
 # note that graph is 0 indexed but the regions are from 1
 import time
 start_time = time.time()
-source = 3
-target = 8
-G = nx.from_numpy_matrix(region_adj_matrix)
-H = G.to_directed()
-nodes = list(G.nodes())
-all_source_target_pairs = list(itertools.permutations(nodes, 2))
-
 
 def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 	edges = list(G.edges())
@@ -50,7 +42,6 @@ def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 	routes = list(nx.all_simple_paths(G, source, target, cutoff))
 	num_routes = len(routes)
 
-	# lambda doesn't work correctly for some reason so have a function
 	def nodes_to_edge_list(route): return zip(route, route[1:])
 	# list of lists of edge tuples for a route for s to t
 	routes = map(nodes_to_edge_list, routes)
@@ -66,10 +57,21 @@ def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 
 	return adj_matrix
 
-# adj_matrix = get_route_edge_adj_matrix(G, source, target)
-# end_time = time.time()
-# print 'Finished creating matrix in', (end_time - start_time) / 60
 
-# print adj_matrix.astype(float)
-# file_name = 'matrix_' + str(source) + '_' + str(target) + '.csv'
-# np.savetxt(file_name, adj_matrix, delimiter=',')
+G = nx.from_numpy_matrix(region_adj_matrix)
+G = G.to_directed()
+nodes = list(G.nodes())
+all_source_target_pairs = list(itertools.permutations(nodes, 2))
+
+for pair in all_source_target_pairs:
+	source = pair[0]
+	target = pair[1]
+	adj_matrix = get_route_edge_adj_matrix(G, source, target)
+	adj_matrix.astype(int)
+	file_name = 'matrices/matrix_' + str(source) + '_' + str(target) + '.csv'
+	np.savetxt(file_name, adj_matrix, delimiter=',')
+
+end_time = time.time()
+print 'Finished creating matrix in', (end_time - start_time) / 60
+
+
