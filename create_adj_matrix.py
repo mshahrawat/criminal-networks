@@ -4,6 +4,7 @@ import os
 import re
 import matplotlib.pyplot as plt
 import networkx as nx
+import itertools
 
 cooffending_df = pd.read_csv('Cooffending.csv', na_values=['.'])
 num_unique_crimes_per_mun = cooffending_df.groupby('MUN')['SeqE'].nunique()
@@ -33,9 +34,15 @@ edges will have cost associated with them as specified
 # NEED directed graph with edges both ways
 # G = nx.complete_graph(4)
 # note that graph is 0 indexed but the regions are from 1
+import time
+start_time = time.time()
 source = 3
 target = 8
 G = nx.from_numpy_matrix(region_adj_matrix)
+H = G.to_directed()
+nodes = list(G.nodes())
+all_source_target_pairs = list(itertools.permutations(nodes, 2))
+
 
 def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 	edges = list(G.edges())
@@ -51,7 +58,7 @@ def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 	# indices of adj matrix correspond to indices of routes and edges
 	# in the routes and edges lists
 	adj_matrix = np.zeros((num_routes, num_edges))
-	# filling in adj_matrix, not efficient but can fix later
+
 	for r in range(num_routes):
 		for e in range(num_edges):
 			if edges[e] in routes[r]:
@@ -59,4 +66,10 @@ def get_route_edge_adj_matrix(G, source, target, cutoff=None):
 
 	return adj_matrix
 
-print get_route_edge_adj_matrix(G, source, target)
+# adj_matrix = get_route_edge_adj_matrix(G, source, target)
+# end_time = time.time()
+# print 'Finished creating matrix in', (end_time - start_time) / 60
+
+# print adj_matrix.astype(float)
+# file_name = 'matrix_' + str(source) + '_' + str(target) + '.csv'
+# np.savetxt(file_name, adj_matrix, delimiter=',')
