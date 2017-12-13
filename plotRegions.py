@@ -67,7 +67,7 @@ def plotGraph(G,org,phase,plot=False,pos=None):
             size=10,
             colorbar=dict(
                 thickness=15,
-                title='Node Connections',
+                title=' # of Connected Administrative Regions',
                 xanchor='left',
                 titleside='right'
             ),
@@ -99,7 +99,7 @@ def plotGraph(G,org,phase,plot=False,pos=None):
     
     fig = go.Figure(data=go.Data([edge_trace]),
              layout=go.Layout(
-                title='<br>Network graph of ' + phase,
+                title='<br>Geographic Network Graph of ' + phase,
                 titlefont=dict(size=16),
                 showlegend=False,
                 hovermode='closest',
@@ -131,6 +131,6 @@ G = G.to_directed()
 print(G.edges())
 org = dict()
 
-pos = {17:[448,100],16:[432,60],15:[395,130],14:[416,130],13:[420,75],12:[471,115],11:[601,220],10:[426,575],9:[536,390],8:[354,210],7:[372,120],6:[423,65],5:[462,70],4:[431,190],3:[464,175],2:[456,290],1:[508,200]}
-trace = plotGraph(G,org,"regions",plot=False,pos=pos)
+pos = {17:[448,100],16:[432,60],15:[398,145],14:[416,137],13:[420,75],12:[471,115],11:[601,220],10:[426,550],9:[520,385],8:[354,230],7:[372,145],6:[423,65],5:[450,58],4:[410,215],3:[450,150],2:[456,305],1:[508,200]}
+trace = plotGraph(G,org,"Quebec",plot=False,pos=pos)
 plotRegions(trace,None)
